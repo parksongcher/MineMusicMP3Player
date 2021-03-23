@@ -93,15 +93,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.CustomViewHo
 
                 //true면 비트맵객체에 메모리를 할당하지 않아서 비트맵을 반환하지 않음.
                 //다만 options fields는 값이 채워지기 때문에 Load 하려는 이미지의 크기를 포함한 정보들을 얻어올 수 있다.
-                options.inJustDecodeBounds = true;
-
-                int scale = 0;
-                if(options.outHeight > imgMaxSize || options.outWidth > imgMaxSize){
-                    scale = (int)Math.pow(2,(int) Math.round(Math.log(imgMaxSize / (double) Math.max(options.outHeight, options.outWidth)) / Math.log(0.5)));
-                }
-                options.inJustDecodeBounds = false; // true면 비트맵을 만들지 않고 해당이미지의 가로, 세로, Mime type등의 정보만 가져옴
-                options.inSampleSize = scale; // 이미지의 원본사이즈를 설정된 스케일로 축소
-
+                options.inJustDecodeBounds = false; // false 비트맵을 만들고 해당이미지의 가로, 세로를 중심으로 가져옴, Mime type등의 정보만 가져옴
                 Bitmap bitmap = BitmapFactory.decodeFileDescriptor(fd.getFileDescriptor(), null, options);
 
                 if(bitmap != null){
@@ -112,7 +104,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.CustomViewHo
                         bitmap = tmp;
                     }
                 }
-                return bitmap;
+                return bitmap;  //값이 있으면 bitmap
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -124,7 +116,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.CustomViewHo
                 }
             }
         }
-        return null;
+        return null;            //값이 없으면 null
     }
 
     public interface OnItemClickListener
